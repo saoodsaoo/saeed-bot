@@ -1,19 +1,17 @@
-
-
 const config = {
 
-    botName:    "𝐂𝐇𝐄𝐎𝐍 𝐁𝐎𝐓",
-    botTag:     "@CHEON",
+    botName:    "𝐒𝐀𝐄𝐄𝐃-𝐁𝐎𝐓",
+    botTag:     "@SAEED",
     botVersion: "2.0.0",
-    botDev:     "𝐋𝐎𝐘𝐃",
-    devNumber:  "4917672339436",
+    botDev:     "𝐒𝐀𝐄𝐄𝐃",
+    devNumber:  "967770179625",
 
     sessions:   "sessions",
-    botNumber:  "", // رقم البوت هنا ضروري 
+    botNumber:  "", 
 
 
     owner: [
-        "4917672339436", //رقم المطور
+        "967770179625", 
     ],
 
     ownerLid: [],
@@ -25,7 +23,7 @@ const config = {
     
     ch: {
         main:    "120363402804601196@newsletter",
-        second:  "120363377374711810@newsletter", // خلهم مش هيفيدوك🐦
+        second:  "120363377374711810@newsletter", 
     },
 
    
@@ -39,29 +37,29 @@ const config = {
         subHeader: (title) => `┌─「 ✦ ${title} 」`,
         tail:      `╚══════════════════════╝`,
         subTail:   `└──────────────────────`,
-        footer:    `〔 𝐂𝐇𝐄𝐎𝐍 𝐁𝐎𝐓 〕`,
+        footer:    `〔 𝐒𝐀𝐄𝐄𝐃-𝐁𝐎𝐓 〕`,
         row:       (key, val) => `│ ✦ ${key}: 〘${val}〙`,
         zarfLine:  `~*『✦▬▬▬✦┇• 🪻 •┇✦▬▬▬✦』*~`,
     },
 
     links: {
         channel: "https://whatsapp.com/channel/0029Vb6kG3s0AgW2lYD8ad1L",
-        group:   "https://chat.whatsapp.com/DSktEHhJ1c0Bn5zjVC4eBO?mode=gi_t",
-        support: "https://chat.whatsapp.com/KkuYNJrg3qv1JslwoFOTUt?mode=gi_t",
+        group:   "https://chat.whatsapp.com/KDO7e7XHcnG4lBdy1YYBAF",
+        support: "https://chat.whatsapp.com/KDO7e7XHcnG4lBdy1YYBAF",
         github:  "https://github.com/Loydsumer/baileys-speed",
-        dev:     "https://wa.me/4917672339436",
+        dev:     "https://wa.me/967770179625",
     },
 
     images: {
-        menu:       "https://raw.githubusercontent.com/LOYD-SOLO/uploads1/main/files/0c0e6a-1777368831455.jpg",
-        owner:      "https://raw.githubusercontent.com/LOYD-SOLO/uploads1/main/files/0c0e6a-1777368831455.jpg",
-        group:      "https://raw.githubusercontent.com/LOYD-SOLO/uploads1/main/files/0c0e6a-1777368831455.jpg",
-        economy:    "https://raw.githubusercontent.com/LOYD-SOLO/uploads1/main/files/0c0e6a-1777368831455.jpg",
-        games:      "https://raw.githubusercontent.com/LOYD-SOLO/uploads1/main/files/0c0e6a-1777368831455.jpg",
-        tools:      "https://raw.githubusercontent.com/LOYD-SOLO/uploads1/main/files/0c0e6a-1777368831455.jpg",
-        info:       "https://raw.githubusercontent.com/LOYD-SOLO/uploads1/main/files/0c0e6a-1777368831455.jpg",
-        downloader: "https://raw.githubusercontent.com/LOYD-SOLO/uploads1/main/files/0c0e6a-1777368831455.jpg",
-        ai:         "https://raw.githubusercontent.com/LOYD-SOLO/uploads1/main/files/0c0e6a-1777368831455.jpg",
+        menu:       "https://i.ibb.co/3904kF0V/image.jpg",
+        owner:      "https://i.ibb.co/3904kF0V/image.jpg",
+        group:      "https://i.ibb.co/3904kF0V/image.jpg",
+        economy:    "https://i.ibb.co/3904kF0V/image.jpg",
+        games:      "https://i.ibb.co/3904kF0V/image.jpg",
+        tools:      "https://i.ibb.co/3904kF0V/image.jpg",
+        info:       "https://i.ibb.co/3904kF0V/image.jpg",
+        downloader: "https://i.ibb.co/3904kF0V/image.jpg",
+        ai:         "https://i.ibb.co/3904kF0V/image.jpg",
     },
 
     
