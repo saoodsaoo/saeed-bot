@@ -17,7 +17,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'
-          cache: 'npm'
+          # حذفنا سطر الـ cache من هنا لحل المشكلة
 
       - name: Install Dependencies
         run: npm install
