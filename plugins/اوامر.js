@@ -4,7 +4,7 @@ import { prepareWAMessageMedia, generateWAMessageFromContent, proto } from '@whi
 import { performance } from 'perf_hooks'
 
 // ═══════════════════════════════════════════════════
-// تعريف أقسام البوت
+// تعريف أقسام البوت - تعديل سعيد الذبحاني
 // ═══════════════════════════════════════════════════
 const menuCategories = {
   الذكاء: 'الذكاء الاصطناعي & الدردشة',
@@ -17,9 +17,7 @@ const menuCategories = {
   المطور: 'المالك & المطور',
 }
 
-// ═══════════════════════════════════════════════════
 // توليد صفوف القائمة من الأقسام
-// ═══════════════════════════════════════════════════
 const rows = Object.entries(menuCategories).map(([id, title]) => ({
   title: `🗂️ ${title}`,
   description: `انقر لفتح قسم ${title}`,
@@ -31,12 +29,12 @@ const rows = Object.entries(menuCategories).map(([id, title]) => ({
 // ═══════════════════════════════════════════════════
 let handler = async (m, { conn, usedPrefix: _p }) => {
   try {
-    // ─── حساب البنج ───
+    // حساب البنج
     let old = performance.now()
     let neww = performance.now()
     let speed = (neww - old).toFixed(4)
 
-    // ─── معلومات المستخدم ───
+    // معلومات المستخدم
     const user = m.pushName || await conn.getName(m.sender) || 'المستخدم'
     const fecha = new Date().toLocaleDateString('ar-SA', {
       weekday: 'long',
@@ -46,27 +44,25 @@ let handler = async (m, { conn, usedPrefix: _p }) => {
     })
     const hora = new Date().toLocaleTimeString('ar-SA')
 
-    // ─── إعدادات البوت ───
-    const botName = global.botName || '𝐂𝐇𝐄𝐎𝐍 𝐁𝐎𝐓'
-    const botDev = global.botDev || '♡Jana♡'
-    const menuImageUrl = global.images?.menu || 'https://files.catbox.moe/jyqut4.jpg'
-    const channel = global.links?.channel || 'https://whatsapp.com/channel/0029VbCJtCILI8YQz9VFQQ2w'
-    const developerNumber = global.botNumber?.replace(/[^0-9]/g, '') || '201002435496'
-    const developerContact = global.links?.dev || `https://wa.me/${developerNumber}`
+    // ─── إعدادات الهوية الخاصة بسعيد الذبحاني ───
+    const botName = '𝐒𝐀𝐄𝐄𝐃-𝐁𝐎𝐓'
+    const botDev = 'سعيد الذبحاني'
+    const menuImageUrl = 'https://i.ibb.co/3904kF0V/image.jpg' 
+    const channel = 'https://whatsapp.com/channel/0029VbCJtCILI8YQz9VFQQ2w'
+    const developerNumber = '967775510427' 
+    const developerContact = `https://wa.me/${developerNumber}`
 
-    // ─── بيانات المستخدم من قاعدة البيانات ───
+    // بيانات المستخدم من قاعدة البيانات
     const userData = global.db?.data?.users?.[m.sender] || {}
     const { level = 0, role = 'مواطن 👨🏻‍💼', exp = 0 } = userData
 
-    // ─── عدد الأوامر ───
+    // عدد الأوامر المفعلة في السورس
     let commandCount = 0
     for (const name in (global.plugins || {})) {
       if (global.plugins[name]?.command) commandCount++
     }
 
-    // ═══════════════════════════════════════════════
     // بناء نص القائمة
-    // ═══════════════════════════════════════════════
     let menuText = `*╭━━𝐖𝐄𝐋𝐂𝐎𝐌𝐄━━━°⃟𑁁⚡*\n`
     menuText += `> °⃟𑁁⚡ *الاسم:* ${user}\n`
     menuText += `> °⃟𑁁⚡ *الرقم:* ${m.sender.split('@')[0]}\n`
@@ -82,18 +78,15 @@ let handler = async (m, { conn, usedPrefix: _p }) => {
     menuText += ` *〔 مــــرحبا بيڪ في ${botName} 〕*\n`
     menuText += `*╰━━━━━━━━━━°⃟𑁁⚡*`
 
-    // ─── إرسال ريأكشن ───
+    // إرسال ريأكشن البدء
     await conn.sendMessage(m.chat, { react: { text: '⚡', key: m.key } })
 
-    // ═══════════════════════════════════════════════
-    // بناء الرسالة التفاعلية (nativeFlowPayload)
-    // ═══════════════════════════════════════════════
+    // بناء الرسالة التفاعلية
     const nativeFlowPayload = {
       body: { text: menuText },
       footer: { text: `⚡ ${botName} بواسطة ${botDev}` },
       nativeFlowMessage: {
         buttons: [
-          // ─── زر قائمة الأقسام ───
           {
             name: 'single_select',
             buttonParamsJson: JSON.stringify({
@@ -107,7 +100,6 @@ let handler = async (m, { conn, usedPrefix: _p }) => {
               ]
             })
           },
-          // ─── أزرار سريعة ───
           {
             name: 'quick_reply',
             buttonParamsJson: JSON.stringify({
@@ -116,14 +108,6 @@ let handler = async (m, { conn, usedPrefix: _p }) => {
             })
           },
           {
-            name: 'quick_reply',
-            buttonParamsJson: JSON.stringify({
-              display_text: '💰 شراء البوت',
-              id: `${_p}شرا`
-            })
-          },
-          // ─── زر القناة الرسمية ───
-          {
             name: 'cta_url',
             buttonParamsJson: JSON.stringify({
               display_text: '📢 القناة الرسمية',
@@ -131,7 +115,6 @@ let handler = async (m, { conn, usedPrefix: _p }) => {
               merchant_url: channel
             })
           },
-          // ─── زر التواصل مع المطور ───
           {
             name: 'cta_url',
             buttonParamsJson: JSON.stringify({
@@ -141,7 +124,6 @@ let handler = async (m, { conn, usedPrefix: _p }) => {
             })
           }
         ],
-        // ─── إعدادات متقدمة للرسالة ───
         messageParamsJson: JSON.stringify({
           limited_time_offer: {
             text: `⚡ ${speed}ms`,
@@ -165,9 +147,7 @@ let handler = async (m, { conn, usedPrefix: _p }) => {
       }
     }
 
-    // ═══════════════════════════════════════════════
-    // تحميل صورة القائمة
-    // ═══════════════════════════════════════════════
+    // تحميل ومعالجة صورة القائمة
     try {
       const media = await prepareWAMessageMedia(
         { image: { url: menuImageUrl } },
@@ -175,20 +155,18 @@ let handler = async (m, { conn, usedPrefix: _p }) => {
       )
       nativeFlowPayload.header = {
         hasMediaAttachment: true,
-        subtitle: 'بوت متعدد الوظائف',
+        subtitle: 'سعيد الذبحاني يحييكم',
         imageMessage: media.imageMessage
       }
     } catch (e) {
       console.error('خطأ في تحميل صورة القائمة:', e)
       nativeFlowPayload.header = {
         hasMediaAttachment: false,
-        subtitle: 'بوت متعدد الوظائف'
+        subtitle: 'سعيد الذبحاني يحييكم'
       }
     }
 
-    // ═══════════════════════════════════════════════
-    // إرسال الرسالة التفاعلية
-    // ═══════════════════════════════════════════════
+    // إرسال الرسالة النهائية عبر relayMessage
     const interactiveMessage = proto.Message.InteractiveMessage.fromObject(nativeFlowPayload)
     const fkontak = await makeFkontak()
     const msg = generateWAMessageFromContent(m.chat, { interactiveMessage }, {
@@ -199,36 +177,14 @@ let handler = async (m, { conn, usedPrefix: _p }) => {
     await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
 
   } catch (e) {
-    // ═══════════════════════════════════════════════
-    // معالجة الخطأ - إرسال قائمة بسيطة
-    // ═══════════════════════════════════════════════
-    console.error('خطأ في القائمة:', e)
-    const botName = global.botName || '𝐂𝐇𝐄𝐎𝐍 𝐁𝐎𝐓'
-    const menuImageUrl = global.images?.menu
-
-    const fallbackText = [
-      `⚡ ${botName}`,
-      '',
-      `• ${_p}اوامر - القائمة الرئيسية`,
-      `• ${_p}بينق - اختبار البوت`,
-      '',
-      '⚠️ خطأ في تحميل القائمة التفاعلية'
-    ].join('\n')
-
-    if (menuImageUrl) {
-      await conn.sendMessage(m.chat, {
-        image: { url: menuImageUrl },
-        caption: fallbackText
-      }, { quoted: m }).catch(() => m.reply(fallbackText))
-    } else {
-      await conn.sendMessage(m.chat, { text: fallbackText }, { quoted: m })
-    }
+    console.error('خطأ في معالج القائمة:', e)
+    const botName = '𝐒𝐀𝐄𝐄𝐃-𝐁𝐎𝐓'
+    const fallbackText = `⚠️ حدث خطأ أثناء تحميل القائمة التفاعلية.\nيرجى التواصل مع المطور: سعيد الذبحاني`
+    await conn.sendMessage(m.chat, { text: fallbackText }, { quoted: m })
   }
 }
 
-// ═══════════════════════════════════════════════════
-// معالج الأزرار التفاعلية (handler.before)
-// ═══════════════════════════════════════════════════
+// معالج الاستجابة للأزرار (قبل تنفيذ الأمر)
 handler.before = async (m, { conn }) => {
   if (m.type === 'interactive_response') {
     try {
@@ -245,29 +201,27 @@ handler.before = async (m, { conn }) => {
         }, { quoted: m })
         return true
       }
-    } catch {}
+    } catch (err) {
+      return false
+    }
   }
   return false
 }
 
-// ═══════════════════════════════════════════════════
-// دالة الاقتباس المخصص
-// ═══════════════════════════════════════════════════
+// إنشاء رسالة اتصال وهمية (الاقتباس)
 async function makeFkontak() {
   try {
-    const res = await fetch('https://cdn.russellxz.click/64bba973.jpg')
-    const thumb2 = Buffer.from(await res.arrayBuffer())
     return {
       key: {
         participants: '0@s.whatsapp.net',
         remoteJid: 'status@broadcast',
         fromMe: false,
-        id: 'Halo'
+        id: 'SaeedBot'
       },
       message: {
         locationMessage: {
-          name: global.botName || '𝐂𝐇𝐄𝐎𝐍 𝐁𝐎𝐓',
-          jpegThumbnail: thumb2
+          name: '𝐒𝐀𝐄𝐄𝐃-𝐁𝐎𝐓',
+          jpegThumbnail: Buffer.alloc(0)
         }
       },
       participant: '0@s.whatsapp.net'
@@ -277,9 +231,7 @@ async function makeFkontak() {
   }
 }
 
-// ═══════════════════════════════════════════════════
-// دالة حساب وقت التشغيل
-// ═══════════════════════════════════════════════════
+// دالة حساب وقت تشغيل السيرفر
 async function getUptime() {
   let totalSeconds = process.uptime()
   let days = Math.floor(totalSeconds / 86400)
@@ -296,9 +248,7 @@ async function getUptime() {
   return parts.join(' ')
 }
 
-// ═══════════════════════════════════════════════════
-// تعريف الأمر
-// ═══════════════════════════════════════════════════
+// إعدادات الأمر والاستدعاء
 handler.help = ['اوامر', 'menu', 'القائمة']
 handler.tags = ['main']
 handler.command = /^(اوامر|قائمه|قائمة|menu|help|مساعدة|مينيو|مهام)$/i
