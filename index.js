@@ -199,11 +199,10 @@ const msgRetryCounterCache = new NodeCache({ stdTTL: 300 })
 const userDevicesCache = new NodeCache({ stdTTL: 300 })
 const { version } = await fetchLatestBaileysVersion()
 
-let phoneNumber = global.botNumber
+let phoneNumber = "967770179625"
 const methodCodeQR = process.argv.includes("qr")
-const methodCode = !!phoneNumber || process.argv.includes("code")
-const MethodMobile = process.argv.includes("mobile")
-
+    const MethodMobile = process.argv.includes("mobile")
+    const methodCode = true
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
 const question = (text) => new Promise((resolve) => rl.question(text, resolve))
 
