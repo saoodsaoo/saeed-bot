@@ -94,19 +94,17 @@
 
 ```bash
 termux-setup-storage
+
 apt update && apt upgrade && pkg install -y git nodejs ffmpeg imagemagick yarn
 
-```bash
 git clone [https://github.com/Saeed-Al-Dhabhani/SAEED-BOT](https://github.com/Saeed-Al-Dhabhani/SAEED-BOT) && cd SAEED-BOT
 
-```bash
 yarn install
 
-```bash
 npm install
 
-```bash
 npm start
+```
 
 </details>
 ​<p align="center">
