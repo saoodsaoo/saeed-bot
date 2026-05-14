@@ -65,9 +65,9 @@ const config = {
     
 
     opts: {
-        queque:    false,
-        restrict:  false,
-        noprint:   false,
+        queque:    true,
+        restrict:  true,
+        noprint:   true,
         autoread:  true,
         autoReact: true,
     },
