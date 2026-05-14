@@ -548,7 +548,7 @@ export async function handler(chatUpdate) {
 }
 
 global.dfail = (type, m, conn) => {
-    const botName = global.botName || "𝐂𝐇𝐄𝐎𝐍 𝐁𝐎𝐓"
+    const botName = global.botName || "𝐒𝐀𝐄𝐄𝐃-𝐁𝐎𝐓"
     const zarf = global.zarf || "~*『✦▬▬▬✦┇• 🪻 •┇✦▬▬▬✦』*~"
     const msg = {
         rowner:   `${zarf}\n🪻 *${botName}*\n${zarf}\n\n❌ هذا الأمر للمطور بس يا حبيبي`,
@@ -581,7 +581,7 @@ export async function deleteUpdate(message) {
     if (!isGroup && !isPrivate) return
     const senderNum = (participant || "").split('@')[0]
     await this.sendMessage(chatJid, {
-      text: `🪻 *${global.botName || '𝐂𝐇𝐄𝐎𝐍 𝐁𝐎𝐓'} — نظام ضد الحذف*\n\n👤 @${senderNum} حذف رسالة!`,
+      text: `🪻 *${global.botName || '𝐒𝐀𝐄𝐄𝐃-𝐁𝐎𝐓'} — نظام ضد الحذف*\n\n👤 @${senderNum} حذف رسالة!`,
       mentions: [participant]
     }).catch(() => {})
     if (msg.message) {
@@ -619,7 +619,7 @@ export async function participantsUpdate({ id, participants, action }) {
     if (!groupMetadata) return
 
     for (const user of participants) {
-        let pp = global.images?.group || "https://i.imgur.com/2hcBYMn.jpg"
+        let pp = global.images?.group || "https://i.ibb.co/3904kF0V/image.jpg"
         try { pp = await this.profilePictureUrl(user, "image") } catch {}
 
         let text = ""
@@ -650,7 +650,7 @@ export async function callUpdate(callUpdate) {
             try {
                 await this.rejectCall(call.id, call.from).catch(() => {})
                 await this.sendMessage(call.from, {
-                    text: `⚡ *${global.botName || "𝐂𝐇𝐄𝐎𝐍 𝐁𝐎𝐓"}*\n\n❌ ما نقدر نقبل المكالمات الحين، شيل البوت من جهات اتصالك`
+                    text: `⚡ *${global.botName || "𝐒𝐀𝐄𝐄𝐃-𝐁𝐎𝐓"}*\n\n❌ ما نقدر نقبل المكالمات الحين، شيل البوت من جهات اتصالك`
                 }).catch(() => {})
             } catch {}
         }
