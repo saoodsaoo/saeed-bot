@@ -29,7 +29,8 @@ import {
     jidNormalizedUser,
 } from "@whiskeysockets/baileys"
 
-import { Low, JSONFile } from "lowdb"
+import { Low } from "lowdb"
+    import { JSONFile } from "lowdb/node"
 import { makeWASocket as MakeSocket, protoType, serialize } from "./lib/simple.js"
 import store from "./lib/store.js"
 
