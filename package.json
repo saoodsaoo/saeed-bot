@@ -1,7 +1,7 @@
 {
-  "name": "cheon-bot",
+  "name": "saeed-bot",
   "version": "2.0.0",
-  "description": "𝐂𝐇𝐄𝐎𝐍 𝐁𝐎𝐓 - by 𝐋𝐎𝐘𝐃",
+  "description": "𝐒𝐀𝐄𝐄𝐃-𝐁𝐎𝐓 - by 𝐒𝐀𝐄𝐄𝐃",
   "main": "index.js",
   "type": "module",
   "directories": {
@@ -13,15 +13,15 @@
     "qr": "node index.js qr",
     "code": "node index.js code"
   },
-  "author": "LOYD",
+  "author": "SAEED",
   "license": "MIT",
   "dependencies": {
     "@hapi/boom": "^10.0.1",
     "@vitalets/google-translate-api": "^9.2.1",
     "@whiskeysockets/baileys": "github:Loydsumer/baileys-speed",
     "aki-api": "^5.0.0",
-    "archiver": "^7.0.1",
     "akinator-api": "^1.0.1",
+    "archiver": "^7.0.1",
     "awesome-phonenumber": "^3.4.0",
     "axios": "^1.13.5",
     "cfonts": "^3.3.1",
