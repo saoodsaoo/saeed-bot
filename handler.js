@@ -242,7 +242,6 @@ export async function handler(chatUpdate) {
         let groupMetadata = {}
         if (m.isGroup) {
             try {
-                
                 groupMetadata = await safeRequest(() => this.groupMetadata(m.chat), `groupMeta_${m.chat}`)
             } catch {
                 groupMetadata = _chats[m.chat]?.metadata || {}
@@ -367,7 +366,7 @@ export async function handler(chatUpdate) {
         if (isBannedChat && isAnyCommand && !isBanChatCommand) {
             const cdKey = `banchat_${m.chat}`
             if (!alreadyNotified(cdKey, 10 * 60 * 1000)) {
-                await conn.sendMessage(m.chat, { text: `🪻 *البوت موقوف في هذا الجروب*\n📌 تواصل مع المطور عشان تفعّله` }, { quoted: m }).catch(() => {})
+                await conn.sendMessage(m.chat, { text: `🪻 *البوت موقوف في هذا الجروب*\n📌 تواصل مع المطور **سعيد الذبحاني** عشان تفعّله` }, { quoted: m }).catch(() => {})
             }
             return
         }
@@ -375,7 +374,7 @@ export async function handler(chatUpdate) {
         if (isBannedUser && isAnyCommand) {
             const cdKey = `banuser_${m.sender}`
             if (!alreadyNotified(cdKey, 10 * 60 * 1000)) {
-                await conn.sendMessage(m.chat, { text: `🪻 *أنت محظور من استخدام البوت*\n📌 السبب: ${user?.bannedReason || 'غير محدد'}` }, { quoted: m }).catch(() => {})
+                await conn.sendMessage(m.chat, { text: `🪻 *أنت محظور من استخدام البوت*\n📌 السبب: ${user?.bannedReason || 'غير محدد'}\n⚠️ تواصل مع **سعيد الذبحاني** للمراجعة` }, { quoted: m }).catch(() => {})
             }
             return
         }
@@ -548,10 +547,10 @@ export async function handler(chatUpdate) {
 }
 
 global.dfail = (type, m, conn) => {
-    const botName = global.botName || "𝐒𝐀𝐄𝐄𝐃-𝐁𝐎𝐓"
-    const zarf = global.zarf || "~*『✦▬▬▬✦┇• 🪻 •┇✦▬▬▬✦』*~"
+    const botName = "𝐒𝐀𝐄𝐄𝐃-𝐁𝐎𝐓"
+    const zarf = "~*『✦▬▬▬✦┇• 🪻 •┇✦▬▬▬✦』*~"
     const msg = {
-        rowner:   `${zarf}\n🪻 *${botName}*\n${zarf}\n\n❌ هذا الأمر للمطور بس يا حبيبي`,
+        rowner:   `${zarf}\n🪻 *${botName}*\n${zarf}\n\n❌ هذا الأمر لـ **سعيد الذبحاني** بس يا حبيبي`,
         owner:    `${zarf}\n🪻 *${botName}*\n${zarf}\n\n❌ هذا الأمر للمطور بس ما ينفعك`,
         mods:     `${zarf}\n🪻 *${botName}*\n${zarf}\n\n❌ هذا الأمر لمشرفي البوت بس`,
         premium:  `${zarf}\n🪻 *${botName}*\n${zarf}\n\n⭐ هذا الأمر للمميزين، تواصل مع المطور`,
@@ -581,7 +580,7 @@ export async function deleteUpdate(message) {
     if (!isGroup && !isPrivate) return
     const senderNum = (participant || "").split('@')[0]
     await this.sendMessage(chatJid, {
-      text: `🪻 *${global.botName || '𝐒𝐀𝐄𝐄𝐃-𝐁𝐎𝐓'} — نظام ضد الحذف*\n\n👤 @${senderNum} حذف رسالة!`,
+      text: `🪻 *𝐒𝐀𝐄𝐄𝐃-𝐁𝐎𝐓 — نظام ضد الحذف*\n\n👤 @${senderNum} حذف رسالة! أنا شفتها 😎`,
       mentions: [participant]
     }).catch(() => {})
     if (msg.message) {
@@ -619,16 +618,16 @@ export async function participantsUpdate({ id, participants, action }) {
     if (!groupMetadata) return
 
     for (const user of participants) {
-        let pp = global.images?.group || "https://i.ibb.co/3904kF0V/image.jpg"
+        let pp = "https://i.ibb.co/3904kF0V/image.jpg"
         try { pp = await this.profilePictureUrl(user, "image") } catch {}
 
         let text = ""
         if (action === "add") {
-            text = (chat.sWelcome || `🪻 *أهلاً وسهلاً @user في المجموعة!*\n\n📌 *${groupMetadata.subject}*`)
+            text = (chat.sWelcome || `🪻 *أهلاً وسهلاً @user في المجموعة!*\n\n📌 منور في جروب: *${groupMetadata.subject}*\n💎 مطور البوت: **سعيد الذبحاني**`)
                 .replace("@user", "@" + user.split("@")[0])
                 .replace("@subject", groupMetadata.subject || "")
         } else if (action === "remove") {
-            text = (chat.sBye || `👋 *@user ساب المجموعة*`)
+            text = (chat.sBye || `👋 *@user ساب المجموعة.. الله معك*`)
                 .replace("@user", "@" + user.split("@")[0])
         } else if (action === "promote") {
             text = `🛡️ *@${user.split("@")[0]} صار أدمن! تهانينا 🎉*`
@@ -650,7 +649,7 @@ export async function callUpdate(callUpdate) {
             try {
                 await this.rejectCall(call.id, call.from).catch(() => {})
                 await this.sendMessage(call.from, {
-                    text: `⚡ *${global.botName || "𝐒𝐀𝐄𝐄𝐃-𝐁𝐎𝐓"}*\n\n❌ ما نقدر نقبل المكالمات الحين، شيل البوت من جهات اتصالك`
+                    text: `⚡ *𝐒𝐀𝐄𝐄𝐃-𝐁𝐎𝐓*\n\n❌ عذراً، المكالمات ممنوعة لتجنب الحظر.\n⚠️ تواصل مع المطور **سعيد الذبحاني** لو عندك استفسار.`
                 }).catch(() => {})
             } catch {}
         }
@@ -660,6 +659,7 @@ export async function callUpdate(callUpdate) {
 let file = global.__filename(import.meta.url, true)
 watchFile(file, async () => {
     unwatchFile(file)
-    console.log(chalk.cyan("🪻 تم تحديث handler.js"))
+    console.log(chalk.cyan("🪻 تم تحديث handler.js بواسطة سعيد الذبحاني"))
     if (global.reloadHandler) console.log(await global.reloadHandler())
 })
+ 
