@@ -21,6 +21,7 @@
     "@whiskeysockets/baileys": "github:Loydsumer/baileys-speed",
     "aki-api": "^5.0.0",
     "archiver": "^7.0.1",
+    "akinator-api": "^1.0.1",
     "awesome-phonenumber": "^3.4.0",
     "axios": "^1.13.5",
     "cfonts": "^3.3.1",
