@@ -1,12 +1,14 @@
-name: Cheon-Bot-Start
+name: SAEED-BOT-RUN
 
 on:
   push:
-    branches: [ "main" ]
-  workflow_dispatch:
+    branches: [ main, master ]
+  schedule:
+    - cron: '0 */6 * * *' # يعيد التشغيل كل 6 ساعات لضمان عدم التوقف
+  workflow_dispatch: # يسمح لك بتشغيله يدوياً
 
 jobs:
-  run-bot:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,11 +18,12 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
-          # حذفنا سطر الـ cache من هنا لحل المشكلة
+          node-version: '20' # نسخة حديثة ومستقرة
 
       - name: Install Dependencies
         run: npm install
 
-      - name: Start Cheon Bot
-        run: npm start
+      - name: Start SAEED-BOT
+        run: node .
+        env:
+          NODE_OPTIONS: "--max_old_space_size=2048"
