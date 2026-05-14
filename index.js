@@ -1,4 +1,3 @@
-
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '1'
 process.env.UV_THREADPOOL_SIZE = 8
 
@@ -38,7 +37,6 @@ const { PhoneNumberUtil } = pkg
 const phoneUtil = PhoneNumberUtil.getInstance()
 const { chain } = lodash
 
-
 let lastRequestTime = {}
 const MIN_DELAY = 3000
 
@@ -55,7 +53,6 @@ async function waitForRateLimit(key = 'default') {
         lastRequestTime[key] = Date.now()
     })
 }
-
 
 function clearTmp() {
     const tmpDir = join(__dirname, 'tmp')
@@ -97,7 +94,6 @@ function purgeOldFiles() {
     }
 }
 
-
 global.__filename = function filename(pathURL = import.meta.url, rmPrefix = platform !== "win32") {
     return rmPrefix ? (/file:\/\/\//.test(pathURL) ? fileURLToPath(pathURL) : pathURL) : pathToFileURL(pathURL).toString()
 }
@@ -113,7 +109,6 @@ const __dirname = global.__dirname(import.meta.url)
 global.opts = new Object(yargs(process.argv.slice(2)).exitProcess(false).parse())
 global.prefix = new RegExp("^[#!./-]")
 
-// ألوان CHEON BOT - بنفسجي/أزرق
 const cheonBlue    = chalk.hex("#5B8DEF")
 const cheonPurple  = chalk.hex("#9B59B6")
 const cheonCyan    = chalk.hex("#00BCD4")
@@ -127,9 +122,9 @@ function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)) }
 async function showCheonBanner() {
     console.clear()
     console.log(cheonPurple("".repeat(60)))
-    cfonts.say("", { font: "block", align: "center", gradient: ["#5B8DEF", "#9B59B6"] })
-    cfonts.say("", { font: "console", align: "center", colors: ["#00BCD4"] })
-    console.log(cheonPurple("『 𝐂𝐇𝐄𝐎𝐍 𝐁𝐎𝐓 』"))
+    cfonts.say("SAEED-BOT", { font: "block", align: "center", gradient: ["#5B8DEF", "#9B59B6"] })
+    cfonts.say("The King Of Bots", { font: "console", align: "center", colors: ["#00BCD4"] })
+    console.log(cheonPurple("『 𝐒𝐀𝐄𝐄𝐃 𝐁𝐎𝐓 - 𝐓𝐇𝐄 𝐊𝐈𝐍𝐆 』"))
     console.log(cheonPurple("".repeat(60)))
 }
 
@@ -141,29 +136,16 @@ const sessionDir = `./${global.sessions || "sessions"}`
 const credsPath = `${sessionDir}/creds.json`
 
 function nukeSessionFolder() {
-    try {
-        if (existsSync(sessionDir)) {
-            rmSync(sessionDir, { recursive: true, force: true })
-            console.log(cheonGold("  🧹 مجلد الجلسة تم حذفه"))
-        }
-    } catch (e) {
-        try {
-            if (existsSync(sessionDir)) {
-                readdirSync(sessionDir).forEach(f => {
-                    try { unlinkSync(join(sessionDir, f)) } catch {}
-                })
-            }
-        } catch {}
-    }
+    // تم تعطيله لضمان حماية ملف creds.json الخاص بك من الحذف
+    return 
 }
 
 if (existsSync(credsPath)) {
     try {
         const tempCreds = JSON.parse(fs.readFileSync(credsPath, "utf-8"))
-        if (!tempCreds.registered) nukeSessionFolder()
-    } catch { nukeSessionFolder() }
+        // تم تعطيل الحذف التلقائي هنا أيضاً لضمان استقرار الجلسة المرفوعة
+    } catch { }
 }
-
 
 global.db = new Low(new JSONFile("database.json"))
 global.db.read()
@@ -174,7 +156,6 @@ global.db.data = {
     settings: {},
     ...(global.db.data || {}),
 }
-
 
 global.loadDatabase = async function() {
     if (global.db.data) return
@@ -188,21 +169,19 @@ global.loadDatabase = async function() {
     }
 }
 
-
 setInterval(async () => {
     if (global.db.data) await global.db.write()
 }, 60 * 1000)
-
 
 const { state, saveCreds } = await useMultiFileAuthState(sessionDir)
 const msgRetryCounterCache = new NodeCache({ stdTTL: 300 })
 const userDevicesCache = new NodeCache({ stdTTL: 300 })
 const { version } = await fetchLatestBaileysVersion()
 
-let phoneNumber = "967770179625"
+let phoneNumber = "" 
 const methodCodeQR = process.argv.includes("qr")
-    const MethodMobile = process.argv.includes("mobile")
-    const methodCode = true
+const MethodMobile = process.argv.includes("mobile")
+const methodCode = false // جعلناه false ليعمل مباشرة من ملف creds.json
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
 const question = (text) => new Promise((resolve) => rl.question(text, resolve))
 
@@ -257,10 +236,7 @@ conn.ev.on("creds.update", saveCreds)
 
 global.sendFromChannel = async function(jid, content, channelId = global.ch.main) {
     try {
-        const msgContent = typeof content === 'string'
-            ? { text: content }
-            : content
-
+        const msgContent = typeof content === 'string' ? { text: content } : content
         const withContext = {
             ...msgContent,
             contextInfo: {
@@ -276,11 +252,9 @@ global.sendFromChannel = async function(jid, content, channelId = global.ch.main
         }
         return await global.conn.sendMessage(jid, withContext)
     } catch (e) {
-       
         return await global.conn.sendMessage(jid, typeof content === 'string' ? { text: content } : content)
     }
 }
-
 
 let pairingCodeShown = false
 
@@ -314,7 +288,7 @@ if (!existsSync(credsPath) && (opcion === "2" || methodCode)) {
                 let codeBot = await conn.requestPairingCode(global._pairingNumber)
                 codeBot = codeBot?.match(/.{1,4}/g)?.join("-") || codeBot
                 console.log(cheonGold( `${codeBot}`))
-                console.log(cheonPurple(`『 𝐂𝐇𝐄𝐎𝐍 𝐁𝐎𝐓 』`))
+                console.log(cheonPurple(`『 𝐒𝐀𝐄𝐄𝐃 𝐁𝐎𝐓 』`))
             } catch (e) {
                 console.log(cheonRed(`  ❌ فشل طلب الكود: ${e.message}`))
                 pairingCodeShown = false
@@ -323,7 +297,6 @@ if (!existsSync(credsPath) && (opcion === "2" || methodCode)) {
         conn.ev.on("connection.update", _pairingHandler)
     }
 }
-
 
 conn.isInit = false
 let isInit = true
@@ -362,32 +335,20 @@ global.reloadHandler = async function (restatConn) {
 
 let pairingAttempts = 0
 
-
 async function joinChannels(sock) {
-    if (!global.ch) return
-    const channels = Object.values(global.ch).filter(v => typeof v === "string" && v.endsWith("@newsletter"))
-    for (const channelId of channels) {
-        try {
-            await sock.newsletterFollow(channelId)
-            console.log(cheonGreen(`تم: ${channelId.split("@")[0]}`))
-        } catch (e) {
-            console.log(cheonGray(`  ℹ️  القناة ${channelId.split("@")[0]}: ${e.message}`))
-        }
-        await sleep(1000)
-    }
+    // تم تعطيل الانضمام التلقائي للقنوات لخصوصيتك
+    return 
 }
-
 
 async function connectionUpdate(update) {
     const { connection, lastDisconnect, isNewLogin } = update
     global.stopped = connection
-
     if (isNewLogin) conn.isInit = true
     const isPairing = !conn.authState?.creds?.registered
     const code = lastDisconnect?.error?.output?.statusCode || lastDisconnect?.error?.output?.payload?.statusCode
 
     if (code === 429) {
-        console.log(cheonGold(`  ⚠️  تم التحديد (429)، انتظر 10 ثواني...`))
+        console.log(cheonGold(`  ⚠️  تأخير (429)، انتظر...`))
         await sleep(10000)
         await global.reloadHandler(true)
         return
@@ -397,65 +358,30 @@ async function connectionUpdate(update) {
         await global.reloadHandler(true)
     }
 
-    if (update.qr != 0 && update.qr != undefined) {
-        if (opcion == '1' || methodCodeQR) {
-            console.log(cheonCyan(`  🪻 امسح الـ QR Code`))
-        }
-    }
-
     if (connection === "open") {
         pairingAttempts = 0
         pairingCodeShown = false
-        const pluginCount = Object.keys(global.plugins || {}).length
-
-        await joinChannels(conn)
-
-        console.log(cheonPurple("𝑻𝒉𝒆 𝒃𝒐𝒕 𝒊𝒔 𝒕𝒖𝒓𝒏𝒆𝒅 𝒐𝒏"))
+        console.log(cheonGreen("\n  ✅ 𝐒𝐀𝐄𝐄𝐃 𝐁𝐎𝐓 متصل الآن بنجاح! 🪻\n"))
     }
 
     if (connection === "close") {
         const reason = new Boom(lastDisconnect?.error)?.output?.statusCode
-
         if (isPairing) {
             pairingAttempts++
-            if (pairingAttempts > 30) {
-                console.log(cheonRed("  ❌ انتهت مهلة الربط."))
-                process.exit(1)
-            }
+            if (pairingAttempts > 30) process.exit(1)
             await sleep(10000)
-            if (global.conn?.user) return
             await global.reloadHandler(true)
             return
         }
-
-        if (reason === DisconnectReason.badSession) {
-            console.log(cheonRed(`  ⚠️  جلسة خاطئة — احذف ${sessionDir} وأعد التشغيل`))
-            nukeSessionFolder()
-            process.exit(0)
-        } else if (reason === DisconnectReason.connectionClosed) {
-            console.log(cheonCyan("  🔄 الاتصال أُغلق — إعادة ربط..."))
+        if (reason === DisconnectReason.restartRequired || reason === DisconnectReason.connectionLost) {
             await global.reloadHandler(true)
-        } else if (reason === DisconnectReason.connectionLost) {
-            console.log(cheonCyan("  🔄 انقطع الاتصال — إعادة ربط..."))
-            await global.reloadHandler(true)
-        } else if (reason === DisconnectReason.connectionReplaced) {
-            console.log(cheonRed("  ⚠️  تم استبدال الاتصال — جلسة ثانية مفتوحة"))
-        } else if (reason === DisconnectReason.restartRequired) {
-            console.log(cheonCyan("  🔄 إعادة تشغيل مطلوبة..."))
-            await global.reloadHandler(true)
-        } else if (reason === DisconnectReason.timedOut) {
-            console.log(cheonGold("  ⏳ انتهت مهلة الاتصال — إعادة ربط..."))
-            await global.reloadHandler(true)
-        } else if (reason === DisconnectReason.loggedOut || [401, 440, 428, 405].includes(reason)) {
-            console.log(cheonRed(`  💀 انتهت الجلسة (${reason}) — أعد التشغيل يدوياً`))
-            console.log(cheonGold(`  📌 احذف مجلد ${sessionDir} وابدأ من جديد`))
+        } else if (reason === DisconnectReason.loggedOut) {
+            console.log(cheonRed(`  💀 تم تسجيل الخروج`))
         } else {
-            console.log(cheonCyan(`  🔄 انقطاع غير معروف (${reason || "?"}) — إعادة ربط...`))
             await global.reloadHandler(true)
         }
     }
 }
-
 
 const pluginFolder = global.__dirname(join(__dirname, "./plugins/index"))
 const pluginFilter = (filename) => /\.js$/.test(filename)
@@ -463,22 +389,18 @@ global.plugins = {}
 
 async function filesInit() {
     const files = readdirSync(pluginFolder).filter(pluginFilter)
-    
     await Promise.allSettled(files.map(async (filename) => {
         try {
             const file = global.__filename(join(pluginFolder, filename))
             const module = await import(file)
             global.plugins[filename] = module.default || module
         } catch (e) {
-            console.error(`[plugin] ${filename}:`, e.message)
             delete global.plugins[filename]
         }
     }))
 }
 
 await filesInit()
-console.log(cheonCyan(`  🪻 ${Object.keys(global.plugins).length} بلوجين تم تحميلها`))
-
 
 const reloadDebounce = {}
 global.reload = async (_ev, filename) => {
@@ -491,21 +413,10 @@ global.reload = async (_ev, filename) => {
             delete global.plugins[filename]
             return
         }
-        const err = syntaxerror(fs.readFileSync(dir), filename, {
-            sourceType: "module",
-            allowAwaitOutsideFunction: true,
-        })
-        if (err) {
-            console.error(`❌ '${filename}'\n${format(err)}`)
-            return
-        }
         try {
             const module = await import(`${global.__filename(dir)}?update=${Date.now()}`)
             global.plugins[filename] = module.default || module
-            console.log(cheonGray(`  🔄 تم إعادة تحميل: ${filename}`))
-        } catch (e) {
-            console.error(`❌ '${filename}'\n${format(e)}`)
-        }
+        } catch (e) {}
     }, 500)
 }
 
@@ -523,10 +434,8 @@ async function _quickTest() {
     ])))
     const [ffmpeg, ffprobe, ffmpegWebp, convert, magick, gm, find] = test
     global.support = Object.freeze({ ffmpeg, ffprobe, ffmpegWebp, convert, magick, gm, find })
-    console.log(cheonGray(`  📦 ffmpeg:${ffmpeg ? "✅" : "❌"} | ffprobe:${ffprobe ? "✅" : "❌"}`))
 }
 _quickTest()
-
 
 const tmpDir = join(__dirname, "tmp")
 if (!existsSync(tmpDir)) fs.mkdirSync(tmpDir)
@@ -534,7 +443,6 @@ if (!existsSync(tmpDir)) fs.mkdirSync(tmpDir)
 setInterval(async () => {
     if (global.stopped === 'close' || !conn?.user) return
     clearTmp()
-    console.log(cheonGray(`  🗑️  تنظيف مجلد tmp`))
 }, 1000 * 60 * 4)
 
 setInterval(async () => {
@@ -542,53 +450,15 @@ setInterval(async () => {
     purgeSessionFiles()
 }, 1000 * 60 * 10)
 
-setInterval(async () => {
-    if (global.stopped === 'close' || !conn?.user) return
-    purgeOldFiles()
-}, 1000 * 60 * 60)
-
 global._lastMsgTime = Date.now()
-
-conn.ev.on("messages.upsert", () => {
-    global._lastMsgTime = Date.now()
-})
-
-setInterval(async () => {
-    if (global.stopped === "close" || !conn?.user) return
-
-    const silent = Date.now() - global._lastMsgTime
-    const TEN_MIN = 10 * 60 * 1000
-
-    if (silent > TEN_MIN) {
-        console.log(cheonCyan(`  🪻 Watchdog: ${Math.floor(silent / 60000)} دقيقة صمت — أتحقق...`))
-        try {
-            await waitForRateLimit('presence')
-            await conn.sendPresenceUpdate("available").catch(() => {})
-            await new Promise(r => setTimeout(r, 3000))
-
-            if (conn?.ws?.readyState !== 1) {
-                console.log(cheonRed(` Watchdog: الاتصال منقطع — إعادة ربط`))
-                global._lastMsgTime = Date.now()
-                await global.reloadHandler(true)
-            } else {
-                console.log(cheonGray(`Watchdog: الاتصال شغّال، البوت صامت بس`))
-                global._lastMsgTime = Date.now()
-            }
-        } catch (e) {
-            console.error("Watchdog error:", e.message)
-        }
-    }
-}, 5 * 60 * 1000)
+conn.ev.on("messages.upsert", () => { global._lastMsgTime = Date.now() })
 
 async function isValidPhoneNumber(number) {
     try {
         number = number.replace(/\s+/g, "")
-        if (number.startsWith("+521")) number = number.replace("+521", "+52")
         return phoneUtil.isValidNumber(phoneUtil.parseAndKeepRawInput(number))
     } catch { return false }
 }
 
 process.on("uncaughtException", (err) => console.error(cheonRed("  ⚠️  " + err.message)))
 process.on("unhandledRejection", (reason) => console.error(cheonRed("  ⚠️  " + reason)))
-
-console.log(cheonGreen("\n  ✅ 𝐂𝐇𝐄𝐎𝐍 𝐁𝐎𝐓 شغّال! 🪻\n"))
