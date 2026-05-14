@@ -97,23 +97,15 @@ termux-setup-storage
 apt update && apt upgrade && pkg install -y git nodejs ffmpeg imagemagick yarn
 
 ```bash
-termux-setup-storage
-
 git clone [https://github.com/Saeed-Al-Dhabhani/SAEED-BOT](https://github.com/Saeed-Al-Dhabhani/SAEED-BOT) && cd SAEED-BOT
 
 ```bash
-termux-setup-storage
-
 yarn install
 
 ```bash
-termux-setup-storage
-
 npm install
 
 ```bash
-termux-setup-storage
-
 npm start
 
 </details>
