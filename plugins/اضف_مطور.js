@@ -53,7 +53,7 @@ let handler = async (m, { conn, isROwner }) => {
     saveOwnerToConfig(num)
 
     await conn.sendMessage(m.chat, {
-      text: `✅ تم إضافة @${num} كمطور ⚔️\n💾 تم الحفظ في config.js\n\n> 🤖 ${global.botName || '𝐂𝐇𝐄𝐎𝐍 𝐁𝐎𝐓'}`,
+      text: `✅ تم إضافة @${num} كمطور ⚔️\n💾 تم الحفظ في config.js\n\n> 🤖 ${global.botName || '𝐒𝐀𝐄𝐄𝐃-𝐁𝐎𝐓'}`,
       mentions: [who]
     }, { quoted: m })
 
@@ -69,3 +69,7 @@ handler.tags    = ['owner']
 handler.rowner  = true
 
 export default handler
+
+
+
+
