@@ -7,7 +7,7 @@ let handler = async (m, { conn }) => {
     }
     await react('⏳')
 
-    const botName  = global.botName || '𝐂𝐇𝐄𝐎𝐍 𝐁𝐎𝐓'
+    const botName  = global.botName || '𝐒𝐀𝐄𝐄𝐃-𝐁𝐎𝐓'
     const botDev   = global.botDev  || ''
     const ownerNum = (global.owner?.[0] || '').replace(/[^0-9]/g, '')
     const imgUrl   = 'https://files.catbox.moe/bo0swt.jpg'
