@@ -439,11 +439,16 @@ export async function handler(chatUpdate) {
 
                 global.comando = command
 
-                if (!isChannel && !isOwners && settings?.self) continue
+                                // --- تعديل سعيد الذبحاني لضمان الرد ---
+                
+                // السماح للمطور بالتحكم حتى لو وضع Self مفعل
+                if (settings?.self && !isOwners && !m.fromMe) continue
 
-                if (!isROwner) {
-                    const botLidJid = global.botLid ? global.botLid + '@lid' : null
-                    if (m.sender === botNumJid || (botLidJid && m.sender === botLidJid) || m.key?.fromMe) continue
+                // منع البوت من الرد على نفسه لتجنب "التعليق اللانهائي" إلا إذا كان أمراً
+                if (m.key.fromMe && !isAnyCommand) continue 
+                
+                // ---------------------------------------
+
                 }
 
                 if (!isROwner && m.id && (
@@ -524,142 +529,3 @@ export async function handler(chatUpdate) {
     } finally {
         if (this.msgqueque) {
             const qi = this.msgqueque.indexOf(m?.id || m?.key?.id)
-            if (qi !== -1) this.msgqueque.splice(qi, 1)
-        }
-        if (m?.sender && global.db.data?.users?.[m.sender]) {
-            global.db.data.users[m.sender].exp += (m.exp || 0)
-            global.db.data.users[m.sender].lastseen = Date.now()
-        }
-
-        try {
-            const mutoUser = global.db.data?.users?.[m?.sender]
-            if (mutoUser?.muto === true && m?.key?.id) {
-                await this.sendMessage(m.chat, {
-                    delete: { remoteJid: m.chat, fromMe: false, id: m.key.id, participant: m.key.participant }
-                }).catch(() => {})
-            }
-        } catch {}
-
-        try {
-            if (!opts["noprint"]) await (await import("./lib/print.js")).default(m, this)
-        } catch (e) { console.warn(e) }
-    }
-}
-
-global.dfail = (type, m, conn) => {
-    const botName = "𝐒𝐀𝐄𝐄𝐃-𝐁𝐎𝐓"
-    const zarf = "~*『✦▬▬▬✦┇• 🪻 •┇✦▬▬▬✦』*~"
-    const msg = {
-        rowner:   `${zarf}\n🪻 *${botName}*\n${zarf}\n\n❌ هذا الأمر لـ **سعيد الذبحاني** بس يا حبيبي`,
-        owner:    `${zarf}\n🪻 *${botName}*\n${zarf}\n\n❌ هذا الأمر للمطور بس ما ينفعك`,
-        mods:     `${zarf}\n🪻 *${botName}*\n${zarf}\n\n❌ هذا الأمر لمشرفي البوت بس`,
-        premium:  `${zarf}\n🪻 *${botName}*\n${zarf}\n\n⭐ هذا الأمر للمميزين، تواصل مع المطور`,
-        group:    `${zarf}\n🪻 *${botName}*\n${zarf}\n\n👥 هذا الأمر يشتغل في المجموعات بس`,
-        private:  `${zarf}\n🪻 *${botName}*\n${zarf}\n\n💬 هذا الأمر يشتغل في الخاص بس`,
-        admin:    `${zarf}\n🪻 *${botName}*\n${zarf}\n\n🛡️ هذا الأمر للأدمن بس يا حبيبي`,
-        botAdmin: `${zarf}\n🪻 *${botName}*\n${zarf}\n\n⚙️ خليني أدمن في الجروب أول`,
-        restrict: `${zarf}\n🪻 *${botName}*\n${zarf}\n\n🚫 هذي الخاصية موقوفة الحين`,
-    }[type]
-    if (msg) return conn.sendMessage(m.chat, { text: msg }, { quoted: m })
-        .then(_ => conn.sendMessage(m.chat, { react: { text: "🪻", key: m.key } }))
-}
-
-export async function deleteUpdate(message) {
-  try {
-    const { fromMe, id, participant, remoteJid } = message
-    if (fromMe) return
-    let msg = null
-    try { msg = await store.loadMessage(remoteJid, id) } catch {}
-    if (!msg) return
-    try { if (typeof this.serializeM === "function") msg = this.serializeM(msg) } catch {}
-    const chatJid = msg?.chat || remoteJid
-    let chat = global.db.data?.chats?.[chatJid] || {}
-    if (!chat?.delete) return
-    let isGroup   = remoteJid?.endsWith('@g.us')
-    let isPrivate = !isGroup && remoteJid?.endsWith('@s.whatsapp.net')
-    if (!isGroup && !isPrivate) return
-    const senderNum = (participant || "").split('@')[0]
-    await this.sendMessage(chatJid, {
-      text: `🪻 *𝐒𝐀𝐄𝐄𝐃-𝐁𝐎𝐓 — نظام ضد الحذف*\n\n👤 @${senderNum} حذف رسالة! أنا شفتها 😎`,
-      mentions: [participant]
-    }).catch(() => {})
-    if (msg.message) {
-      try { await this.sendMessage(chatJid, { forward: msg }) } catch {
-        try { if (typeof this.copyNForward === "function") await this.copyNForward(chatJid, msg) } catch {}
-      }
-    }
-  } catch {}
-}
-
-export async function groupsUpdate(groupsUpdate) {
-  for (const groupUpdate of groupsUpdate) {
-    const id = groupUpdate.id
-    if (!id) continue
-    let chat = global.db.data?.chats?.[id]
-    if (!chat?.detect) continue
-    let text = ''
-    if (groupUpdate.subject) text = `📝 تم تغيير اسم المجموعة إلى:\n*${groupUpdate.subject}*`
-    if (groupUpdate.desc)    text = `📋 تم تغيير وصف المجموعة:\n${groupUpdate.desc}`
-    if (groupUpdate.revoke)  text = `🔗 تم تغيير رابط المجموعة`
-    if (!text) continue
-    try { await this.sendMessage(id, { text, mentions: this.parseMention?.(text) || [] }) } catch {}
-  }
-}
-
-export async function participantsUpdate({ id, participants, action }) {
-    if (opts["self"]) return
-    if (this.isInit) return
-    if (global.db.data == null) await global.loadDatabase()
-
-    const chat = global.db.data.chats[id] || {}
-    if (!chat.welcome) return
-
-    const groupMetadata = await safeRequest(() => this.groupMetadata(id), `groupMeta_${id}`).catch(() => null)
-    if (!groupMetadata) return
-
-    for (const user of participants) {
-        let pp = "https://i.ibb.co/3904kF0V/image.jpg"
-        try { pp = await this.profilePictureUrl(user, "image") } catch {}
-
-        let text = ""
-        if (action === "add") {
-            text = (chat.sWelcome || `🪻 *أهلاً وسهلاً @user في المجموعة!*\n\n📌 منور في جروب: *${groupMetadata.subject}*\n💎 مطور البوت: **سعيد الذبحاني**`)
-                .replace("@user", "@" + user.split("@")[0])
-                .replace("@subject", groupMetadata.subject || "")
-        } else if (action === "remove") {
-            text = (chat.sBye || `👋 *@user ساب المجموعة.. الله معك*`)
-                .replace("@user", "@" + user.split("@")[0])
-        } else if (action === "promote") {
-            text = `🛡️ *@${user.split("@")[0]} صار أدمن! تهانينا 🎉*`
-        } else if (action === "demote") {
-            text = `📉 *@${user.split("@")[0]} ما عاد أدمن*`
-        }
-
-        if (text) {
-            await this.sendMessage(id, { text, mentions: [user] }).catch(() => {})
-        }
-    }
-}
-
-export async function callUpdate(callUpdate) {
-    const settings = global.db.data?.settings?.[this.user?.jid] || {}
-    if (!settings.antiCall) return
-    for (const call of callUpdate) {
-        if (!call.isGroup && call.status === "offer") {
-            try {
-                await this.rejectCall(call.id, call.from).catch(() => {})
-                await this.sendMessage(call.from, {
-                    text: `⚡ *𝐒𝐀𝐄𝐄𝐃-𝐁𝐎𝐓*\n\n❌ عذراً، المكالمات ممنوعة لتجنب الحظر.\n⚠️ تواصل مع المطور **سعيد الذبحاني** لو عندك استفسار.`
-                }).catch(() => {})
-            } catch {}
-        }
-    }
-}
-
-let file = global.__filename(import.meta.url, true)
-watchFile(file, async () => {
-    unwatchFile(file)
-    console.log(chalk.cyan("🪻 تم تحديث handler.js بواسطة سعيد الذبحاني"))
-    if (global.reloadHandler) console.log(await global.reloadHandler())
-})
- 
